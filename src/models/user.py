@@ -12,10 +12,20 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String)
     password_hashed = Column(String)
+    role = Column(String, default=Roles.VIEWER.value)
     created_at = Column(DateTime, default=datetime.now)
     created_by = Column(
         Integer,
         ForeignKey('users.id'),
         nullable=True  # self registration case
     )
-    role = Column(String, default=Roles.viewer.value)
+    modified_at = Column(
+        DateTime,
+        onupdate=datetime.now,
+        nullable=True
+    )
+    modified_by = Column(
+        Integer,
+        ForeignKey('users.id'),
+        nullable=True  # self registration case
+    )
