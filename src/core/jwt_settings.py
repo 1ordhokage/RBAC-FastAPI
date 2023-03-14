@@ -1,7 +1,7 @@
 from pydantic import BaseSettings
 
 
-class JWTSettings(BaseSettings):
+class JwtSettings(BaseSettings):
     """JWT config class."""
     algorithm: str
     expires_seconds: str
@@ -12,4 +12,4 @@ class JWTSettings(BaseSettings):
         env_prefix = "JWT_"
 
 
-jwt_settings = JWTSettings()
+jwt_settings = JwtSettings()
