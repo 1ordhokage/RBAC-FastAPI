@@ -13,10 +13,10 @@ from src.models.user import User
 from src.models.schemas.utils.jwt import JwToken
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl='/users/authorize')
+oauth2_schema = OAuth2PasswordBearer(tokenUrl='/authorize')
 
 
-def get_current_user_info(token: str = Depends(oauth2_schema)) -> (int, str):
+def get_current_user_info(token: str = Depends(oauth2_schema)) -> dict:
     return UsersService.verify_token(token)
 
 
@@ -48,7 +48,7 @@ class UsersService:
         return pbkdf2_sha256.verify(password_text, password_hash)
 
     @staticmethod
-    def verify_token(token: str) -> (int, str):
+    def verify_token(token: str) -> dict[str, str]:
         """Validates JWT.
         Args:
             token: given token.
@@ -64,9 +64,9 @@ class UsersService:
         except JWTError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Invalid token'
+                detail='Not authenticated'
             )
-        return payload.get('sub'), payload.get('role')
+        return payload
 
     @staticmethod
     def create_token(user_id: int, user_role: str) -> JwToken:
@@ -80,14 +80,14 @@ class UsersService:
         now = datetime.utcnow()
         payload = {
             'iat': now,
-            'exp': now + timedelta(seconds=jwt_settings.jwt_expires_seconds),
+            'exp': now + timedelta(seconds=jwt_settings.expires_seconds),
             'sub': str(user_id),
             'role': user_role
         }
         token = jwt.encode(
             payload,
-            jwt_settings.jwt_secret,
-            algorithm=jwt_settings.jwt_algorithm
+            jwt_settings.secret_key,
+            algorithm=jwt_settings.algorithm
         )
         return JwToken(access_token=token)
 
@@ -128,11 +128,17 @@ class UsersService:
         Returns:
             JwToken: JWT.
         """
-        user = self.get_user_by_name(username)
-        if not self.check_password(password_text, user.password_hashed):
+        try:
+            user = self.get_user_by_name(username)
+        except HTTPException:
+            user = None
+        if not user or not self.check_password(
+            password_text,
+            user.password_hashed
+        ):
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Invalid password"
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid username or password"
             )
         return self.create_token(user.id, user.role)
 
