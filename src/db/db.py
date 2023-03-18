@@ -5,7 +5,7 @@ from src.core.db_settings import db_settings
 
 
 engine = create_engine(
-    db_settings.db_connection_string
+    db_settings.connection_string
 )
 
 Session = sessionmaker(
