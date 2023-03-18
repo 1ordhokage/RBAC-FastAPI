@@ -4,12 +4,12 @@ from pydantic import BaseSettings
 class JwtSettings(BaseSettings):
     """JWT config class."""
     algorithm: str
-    expires_seconds: str
+    expires_seconds: int
     secret_key: str
 
     class Config:
         env_file = '../.env'
-        env_prefix = "JWT_"
+        env_prefix = 'JWT_'
 
 
 jwt_settings = JwtSettings()

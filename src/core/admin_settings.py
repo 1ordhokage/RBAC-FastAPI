@@ -8,7 +8,7 @@ class AdminSettings(BaseSettings):
 
     class Config:
         env_file = '../.env'
-        env_prefix = "ADMIN_"
+        env_prefix = 'ADMIN_'
 
 
 admin_settings = AdminSettings()

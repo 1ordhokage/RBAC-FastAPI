@@ -7,7 +7,7 @@ class DBSettings(BaseSettings):
 
     class Config:
         env_file = '../.env'
-        env_prefix = "DB_"
+        env_prefix = 'DB_'
 
 
 db_settings = DBSettings()
