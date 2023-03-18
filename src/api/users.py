@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 class RoleChecker:
-    """Permission-checker implementation."""
+    """Permission-checker dependency."""
     def __init__(self, roles: list):
         self.roles = roles
 
