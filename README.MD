@@ -109,10 +109,3 @@ def create_user(
   ...
 )
 ```
-
-## Getting started
-`pip install -r requirements.txt`
-
-`export PYTHONPATH="${PYTHONPATH}:/path/to/your/project/"`
-
-`python3 src/main.py`
