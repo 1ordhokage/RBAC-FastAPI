@@ -1,7 +1,7 @@
 # Custom FastAPI Role-based access control
 
 ## Built with
- - Pyhton 3.10
+ - Python 3.10
  - FastAPI
  - SQLAlchemy + psycopg2, Alembic
  - passlib, python-jose
